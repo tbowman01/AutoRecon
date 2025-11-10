@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "autorecon": {
+      "command": "python",
+      "args": ["/absolute/path/to/AutoRecon/mcp-server/autorecon_mcp_server.py"],
+      "env": {}
+    }
+  }
+}

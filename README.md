@@ -447,6 +447,45 @@ In fact, enum4linux will always try these ports when it is run. So if the SMB se
 
 * If run_once is set to true, the command will only ever run once for that target, even if the SMB service is found on multiple ports.
 
+## MCP Server Integration
+
+AutoRecon now includes a Model Context Protocol (MCP) server for integration with AI assistants like Claude. This allows you to control AutoRecon and analyze scan results through natural language conversations.
+
+### Features
+
+- **Start and manage scans** programmatically through AI assistants
+- **Access scan results** as structured resources
+- **Search and analyze** reconnaissance data with AI assistance
+- **Get intelligent recommendations** for next steps
+- **Automated vulnerability analysis** using AI-powered prompts
+
+### Quick Start
+
+1. Install the MCP SDK:
+```bash
+pip install mcp
+```
+
+2. Add to your Claude Desktop config:
+```json
+{
+  "mcpServers": {
+    "autorecon": {
+      "command": "python",
+      "args": ["/path/to/AutoRecon/mcp-server/autorecon_mcp_server.py"]
+    }
+  }
+}
+```
+
+3. Restart Claude Desktop and start using natural language commands:
+   - "Start an AutoRecon scan on 10.10.10.1"
+   - "Show me the discovered services on 10.10.10.1"
+   - "Analyze the scan results for 10.10.10.1"
+   - "What should I investigate next?"
+
+For detailed documentation, see [mcp-server/README.md](mcp-server/README.md) and [mcp-server/QUICKSTART.md](mcp-server/QUICKSTART.md).
+
 ## Testimonials
 
 > AutoRecon was invaluable during my OSCP exam, in that it saved me from the tedium of executing my active information gathering commands myself.  I was able to start on a target with all of the information I needed clearly laid in front of me.  I would strongly recommend this utility for anyone in the PWK labs, the OSCP exam, or other environments such as VulnHub or HTB.  It is a great tool for both people just starting down their journey into OffSec and seasoned veterans alike.  Just make sure that somewhere between those two points you take the time to learn what's going on "under the hood" and how / why it scans what it does.
