@@ -5,12 +5,12 @@ use autorecon_core::{
     Result,
 };
 use async_trait::async_trait;
-use napi::bindgen_prelude::*;
+use napi::threadsafe_function::ThreadsafeFunction;
 use std::sync::Arc;
 use tokio::sync::Semaphore;
 
 /// Command output from JavaScript callback
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, serde::Serialize)]
 struct JsCommandOutput {
     stdout: String,
     stderr: String,
@@ -27,7 +27,7 @@ pub struct NodeExecutor {
     semaphore: Arc<Semaphore>,
 
     /// JavaScript callback function for command execution
-    execute_fn: Arc<ThreadsafeFunction<String, ErrorStrategy::CalleeHandled>>,
+    execute_fn: Arc<ThreadsafeFunction<String, napi::threadsafe_function::ErrorStrategy::CalleeHandled>>,
 }
 
 impl NodeExecutor {
@@ -35,14 +35,14 @@ impl NodeExecutor {
     ///
     /// # Arguments
     /// * `max_concurrent` - Maximum number of concurrent command executions
-    /// * `execute_fn` - JavaScript function to execute commands
+    /// * `execute_fn` - Threadsafe JavaScript function to execute commands
     pub fn new(
         max_concurrent: usize,
-        execute_fn: ThreadsafeFunction<String, ErrorStrategy::CalleeHandled>,
+        execute_fn: Arc<ThreadsafeFunction<String, napi::threadsafe_function::ErrorStrategy::CalleeHandled>>,
     ) -> Self {
         NodeExecutor {
             semaphore: Arc::new(Semaphore::new(max_concurrent)),
-            execute_fn: Arc::new(execute_fn),
+            execute_fn,
         }
     }
 }
@@ -56,30 +56,29 @@ impl CommandExecutor for NodeExecutor {
         })?;
 
         let command = command.to_string();
-        let execute_fn = Arc::clone(&self.execute_fn);
 
-        // Call JavaScript function and wait for result
-        let result: Result<JsCommandOutput, napi::Error> = execute_fn
-            .call_async(command)
+        // Call JavaScript function - it should return a JSON string
+        let result_json: String = self.execute_fn
+            .call_async(Ok(command))
             .await
-            .map_err(|e| napi::Error::from_reason(format!("Execute callback error: {}", e)))
-            .and_then(|value| {
-                serde_json::from_value(value)
-                    .map_err(|e| napi::Error::from_reason(format!("Failed to parse output: {}", e)))
-            });
+            .map_err(|e| {
+                autorecon_core::AutoReconError::Execution(format!(
+                    "JavaScript callback error: {}",
+                    e
+                ))
+            })?;
 
-        match result {
-            Ok(js_output) => Ok(CommandOutput {
-                stdout: js_output.stdout,
-                stderr: js_output.stderr,
-                exit_code: js_output.exit_code,
-                duration_ms: js_output.duration_ms,
-            }),
-            Err(e) => Err(autorecon_core::AutoReconError::Execution(format!(
-                "JavaScript callback failed: {}",
-                e
-            ))),
-        }
+        // Parse the JSON result
+        let js_output: JsCommandOutput = serde_json::from_str(&result_json).map_err(|e| {
+            autorecon_core::AutoReconError::Execution(format!("Failed to parse output: {}", e))
+        })?;
+
+        Ok(CommandOutput {
+            stdout: js_output.stdout,
+            stderr: js_output.stderr,
+            exit_code: js_output.exit_code,
+            duration_ms: js_output.duration_ms,
+        })
     }
 
     async fn execute_with_timeout(
