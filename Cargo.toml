@@ -3,7 +3,7 @@ resolver = "2"
 members = [
     "crates/autorecon-core",
     "crates/autorecon-cli",
-    "crates/autorecon-wasm",
+    "crates/autorecon-node",
     "crates/autorecon-py",
 ]
 
@@ -34,12 +34,9 @@ futures = "0.3"
 clap = { version = "4.4", features = ["derive"] }
 colored = "2.1"
 
-# WASM dependencies
-wasm-bindgen = "0.2"
-wasm-bindgen-futures = "0.4"
-js-sys = "0.3"
-console_error_panic_hook = "0.1"
-serde-wasm-bindgen = "0.6"
+# N-API dependencies for Node.js
+napi = "2.16"
+napi-derive = "2.16"
 
 # Python dependencies
 pyo3 = { version = "0.20", features = ["extension-module"] }
