@@ -142,10 +142,22 @@ impl Target {
 
 /// Main scanner that orchestrates scanning operations
 pub struct Scanner<E: CommandExecutor, H: OutputHandler> {
-    config: Arc<Config>,
-    executor: Arc<E>,
-    output_handler: Arc<H>,
-    context: ScanContext,
+    pub(crate) config: Arc<Config>,
+    pub(crate) executor: Arc<E>,
+    pub(crate) output_handler: Arc<H>,
+    pub(crate) context: ScanContext,
+}
+
+// Implement Clone for Scanner
+impl<E: CommandExecutor, H: OutputHandler> Clone for Scanner<E, H> {
+    fn clone(&self) -> Self {
+        Scanner {
+            config: Arc::clone(&self.config),
+            executor: Arc::clone(&self.executor),
+            output_handler: Arc::clone(&self.output_handler),
+            context: self.context.clone(),
+        }
+    }
 }
 
 impl<E: CommandExecutor, H: OutputHandler> Scanner<E, H> {
