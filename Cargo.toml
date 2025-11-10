@@ -1,0 +1,55 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/autorecon-core",
+    "crates/autorecon-cli",
+    "crates/autorecon-node",
+    "crates/autorecon-py",
+]
+
+[workspace.package]
+version = "1.0.0"
+authors = ["AutoRecon Contributors"]
+edition = "2021"
+license = "GPL-3.0"
+repository = "https://github.com/Tib3rius/AutoRecon"
+homepage = "https://github.com/Tib3rius/AutoRecon"
+readme = "README.md"
+
+[workspace.dependencies]
+# Core dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+regex = "1.10"
+async-trait = "0.1"
+thiserror = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+futures = "0.3"
+
+# CLI dependencies
+clap = { version = "4.4", features = ["derive"] }
+colored = "2.1"
+
+# N-API dependencies for Node.js
+napi = "2.16"
+napi-derive = "2.16"
+
+# Python dependencies
+pyo3 = { version = "0.20", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.20", features = ["tokio-runtime"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.release-wasm]
+inherits = "release"
+opt-level = "z"
+lto = true
+codegen-units = 1

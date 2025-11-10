@@ -1,0 +1,21 @@
+[package]
+name = "autorecon-py"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Python bindings for AutoRecon"
+
+[lib]
+name = "autorecon"
+crate-type = ["cdylib"]
+
+[dependencies]
+autorecon-core = { path = "../autorecon-core" }
+pyo3 = { workspace = true }
+pyo3-asyncio = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }

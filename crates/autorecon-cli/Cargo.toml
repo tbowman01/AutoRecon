@@ -1,0 +1,24 @@
+[package]
+name = "autorecon-cli"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Native CLI for AutoRecon network reconnaissance"
+
+[[bin]]
+name = "autorecon"
+path = "src/main.rs"
+
+[dependencies]
+autorecon-core = { path = "../autorecon-core" }
+tokio = { workspace = true }
+clap = { workspace = true }
+colored = { workspace = true }
+chrono = { workspace = true }
+async-trait = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.10"

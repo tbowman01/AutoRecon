@@ -1,0 +1,54 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "autorecon"
+version = "1.0.0"
+description = "Network reconnaissance automation tool - Rust native bindings for Python"
+authors = [
+    {name = "Tib3rius"},
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+]
+keywords = ["security", "reconnaissance", "pentesting", "nmap", "network-scanning", "oscp"]
+license = {text = "GPL-3.0"}
+
+[project.urls]
+Homepage = "https://github.com/Tib3rius/AutoRecon"
+Repository = "https://github.com/Tib3rius/AutoRecon"
+Issues = "https://github.com/Tib3rius/AutoRecon/issues"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+module-name = "autorecon"
+
+[tool.maturin.target.x86_64-unknown-linux-gnu]
+strip = true
+
+[tool.maturin.target.x86_64-apple-darwin]
+strip = true
+
+[tool.maturin.target.aarch64-apple-darwin]
+strip = true
+
+[tool.maturin.target.x86_64-pc-windows-msvc]
+strip = false
