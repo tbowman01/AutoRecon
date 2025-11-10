@@ -6,7 +6,6 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 use std::path::PathBuf;
-use std::sync::Arc;
 
 mod executor;
 mod output;
