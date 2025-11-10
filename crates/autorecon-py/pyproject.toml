@@ -39,7 +39,6 @@ Issues = "https://github.com/Tib3rius/AutoRecon/issues"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
-python-source = "python"
 module-name = "autorecon"
 
 [tool.maturin.target.x86_64-unknown-linux-gnu]

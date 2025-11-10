@@ -59,7 +59,7 @@ service-names = [
 ]
 
     [[finger.scan]]
-    nmap = 'nmap-finger'
+    name = 'nmap-finger'
     command = 'nmap {nmap_extra} -sV -p {port} --script="banner,finger" -oN "{scandir}/{protocol}_{port}_finger_nmap.txt" -oX "{scandir}/xml/{protocol}_{port}_finger_nmap.xml" {address}'
 
 [ftp]
@@ -310,7 +310,7 @@ service-names = [
 
     [[oracle.manual]]
     description = 'Brute-force SIDs using Nmap'
-    command = 'nmap {nmap_extra} -sV -p {port} --script="banner,oracle-sid-brute" -oN "{scandir}/{protocol}_{port}_oracle_sid-brute_nmap.txt" -oX "{scandir}/xml/{protocol}_{port}_oracle_sid-brute_nmap.xml" {address}'
+    commands = ['nmap {nmap_extra} -sV -p {port} --script="banner,oracle-sid-brute" -oN "{scandir}/{protocol}_{port}_oracle_sid-brute_nmap.txt" -oX "{scandir}/xml/{protocol}_{port}_oracle_sid-brute_nmap.xml" {address}']
 
     [[oracle.manual]]
     description = 'Install ODAT (https://github.com/quentinhardy/odat) and run the following commands:'
